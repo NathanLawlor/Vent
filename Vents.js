@@ -6,43 +6,6 @@ import { vents } from './vents.json'
 
 import CircularProgressBar from './CircularProgressBar.js';
 
-const styles = StyleSheet.create({
-  createVent: {
-    padding: 5,
-    backgroundColor: "#3498db",
-    alignSelf: "flex-end",
-    margin: 15,
-    shadowOpacity: 0.7,
-    shadowOffset: {width: 1, height: 2}
-  },
-  ventContainer: {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    paddingTop: 15
-  },
-  ventTile: {
-    position: "relative",
-    margin: 15,
-    width: "85%",
-    padding: 15,
-    backgroundColor: "whitesmoke", 
-    borderWidth: 2, 
-    borderRadius: 10,
-    borderColor: "black",
-    shadowOpacity: 0.4,
-    shadowOffset: {width: 2, height: 2}
-  },
-  timer: {
-    position: "absolute", 
-    right: -10, 
-    top: -20,
-    borderRadius: 50,
-    backgroundColor: "whitesmoke", 
-    shadowOpacity: 0.7,
-    shadowOffset: {width: 3, height: 4}}
-})
-
 export default function Vents({navigation}) {
   return (
     <View style={{flex: 1, alignItems: 'center'}}>
@@ -67,8 +30,7 @@ export default function Vents({navigation}) {
                 <View style={styles.timer}> 
                   <CircularProgressBar 
                     timeLeft={vent.timeLeft} 
-                    percent={(vent.timeLeft/24)*100} 
-                    baseDegrees={0} 
+                    percent={(vent.timeLeft/24)*100}
                     radius={28} 
                     ringWidth={7} 
                     textFontSize={16}/>
@@ -83,3 +45,41 @@ export default function Vents({navigation}) {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  createVent: {
+    padding: 5,
+    backgroundColor: "#3498db",
+    alignSelf: "flex-end",
+    margin: 15,
+    shadowOpacity: 0.5,
+    shadowOffset: {width: 1, height: 2}
+  },
+  ventContainer: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    paddingTop: 15
+  },
+  ventTile: {
+    position: "relative",
+    margin: 15,
+    width: "85%",
+    padding: 15,
+    backgroundColor: "whitesmoke", 
+    borderWidth: 2, 
+    borderRadius: 10,
+    borderColor: "black",
+    shadowOpacity: 0.4,
+    shadowOffset: {width: 2, height: 2}
+  },
+  timer: {
+    position: "absolute", 
+    right: -10, 
+    top: -18,
+    borderRadius: 50,
+    backgroundColor: "whitesmoke", 
+    shadowOpacity: 0.7,
+    shadowOffset: {width: 3, height: 4}
+  }
+})

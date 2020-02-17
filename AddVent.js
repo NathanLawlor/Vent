@@ -1,54 +1,100 @@
 import React from 'react';
 import { useState } from 'react';
-import { View, Text, TextInput, ScrollView} from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView} from 'react-native';
+
+const submitVent = () => {
+  alert("Vent Submitted :)")
+}
+
+const FormInput = ({ heading, placeholder, value, maxLength, onChangeText }) => {
+  return (
+    <View style={styles.inputBox}>
+      <View style={{padding: 8, backgroundColor: "#3498db"}}>
+        <Text style={{fontSize: 20, fontWeight: "bold", color: "whitesmoke"}}>{heading}</Text>
+      </View>
+      <TextInput 
+        value={value}
+        placeholder={placeholder}
+        style={styles.textInput}
+        onChangeText={(text) => onChangeText(text)}
+        maxLength={maxLength}
+        selectionColor={"#3498db"}
+        autoCapitalize={"sentences"}
+        multiline
+        editable
+      />
+    </View>
+  )
+}
 
 export default function AddVent() {
 
   const [title, setTitle] = useState("");
-  const [vent, setVent] = useState("");
-
-  const textInputStyle = {
-    fontSize: 14,
-    padding: 5,
-    backgroundColor: "white",
-    borderWidth: 0.5,
-    borderBottomWidth: 1,
-    borderRadius: 5,
-  }
-
-  function VentHeading({ heading }) {
-    return <Text style={{fontSize: 16}}>{heading}:</Text>
-  }
+  const [feeling, setFeeling] = useState(""); 
+  const [content, setContent] = useState("");   
 
   return (
-    <View style={{padding: 20}}>
-      <ScrollView>
+    <View style={{ paddingLeft: 10, paddingRight: 10}}>
+      <ScrollView style={{height: "100%"}} indicatorStyle="white">
         <View style={{padding: 10}}>
-          <VentHeading heading={"Title"}/>
-          <TextInput 
+          <FormInput 
+            heading={"Title"}
+            placeholder={"....."}
             value={title}
-            placeholder={"Title"}
-            style={textInputStyle}
-            onChangeText={text => setTitle(text)}
-            maxLength={35} 
-            multiline
-            editable
+            onChangeText={setTitle}
+            maxLength={60}
           />
-        </View>
 
-        <View style={{padding: 10}}>
-          <VentHeading heading={"Vent"}/>  
-          <TextInput 
-            value={vent}
-            placeholder={"Vent your feelings..."}
-            style={textInputStyle}
-            onChangeText={text => setVent(text)}
-            maxLength={450} 
-            multiline
-            editable
+          <FormInput 
+            heading={"Content"}
+            placeholder={"Talk about how you feel?"}
+            value={content}
+            onChangeText={setContent}
+            maxLength={400}
+          /> 
+
+          <FormInput 
+            heading={"Feeling"}
+            placeholder={"Summarise your feeling. E.g. Upset"}
+            value={feeling}
+            onChangeText={setFeeling}
+            maxLength={25}
           />
+
+          <TouchableOpacity style={styles.submitVent} onPress={() => submitVent()}>
+            <View>
+              <Text style={{fontSize: 25, color: "whitesmoke"}}> Vent </Text>
+            </View>
+          </TouchableOpacity>     
         </View>
       </ScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  inputBox: {
+    marginTop: 20,
+    borderWidth: 2,
+    borderColor: "grey",
+  },
+  textInput: {
+    fontSize: 20,
+    padding: 8,
+    backgroundColor: "white",
+    borderTopWidth: 1,
+    borderTopColor: "grey",
+  },
+  submitVent: {
+    width: "30%",
+    marginTop: 25,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: "grey",
+    backgroundColor: "#3498db",
+    alignSelf: "flex-start",
+    alignItems: "center",
+    shadowOpacity: 0.5,
+    shadowOffset: {width: 1, height: 2}
+  }
+})
