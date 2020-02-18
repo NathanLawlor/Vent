@@ -54,8 +54,8 @@ export default function AddVent() {
           /> 
 
           <FormInput 
-            heading={"Feeling"}
-            placeholder={"Summarise your feeling. E.g. Upset"}
+            heading={"Emotion"}
+            placeholder={"Summarise your emotion. E.g. Upset"}
             value={feeling}
             onChangeText={setFeeling}
             maxLength={25}

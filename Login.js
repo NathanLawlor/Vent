@@ -1,33 +1,26 @@
 import React, {useState} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { SafeAreaView } from 'react-navigation';
+
+import ActionButton from './ActionButton.js';
 
 const userInfo = {username: "", password: ""}
 
 const styles = StyleSheet.create({ 
     loginContainer: {
         height: "100%", 
-        display: "flex", 
+        display: "flex",
         alignItems: "center", 
         justifyContent: "center",
         backgroundColor: "lightblue", 
     },
     loginInput: {
-        width: 300,
+        width: "80%",
         height: 40,
         padding: 5,
         margin: 10,
         backgroundColor: "whitesmoke",
         borderWidth: 1
-    },
-    loginButton: {
-        width: "40%", 
-        padding: 8, 
-        marginTop: 20,
-        backgroundColor: "#3498db",
-        shadowOpacity: 0.7,
-        shadowOffset: {width: 1, height: 2}
     }
 })
 
@@ -69,12 +62,16 @@ export default function Login ({navigation}) {
             onChangeText={value => setPasswordHandler(value)}
             secureTextEntry
         />
-        <TouchableOpacity 
-            style={styles.loginButton} 
-            onPress={() => login()}
-        >
-            <Text style={{fontSize: 25, textAlign: "center", color: "whitesmoke"}}> Login </Text>
-        </TouchableOpacity>
+        <View style={{display: "flex", flexDirection: "row", width: "80%", justifyContent: "space-between"}}>
+            <ActionButton 
+                text={"Login"} 
+                onPress={() => login()}
+            />
+            <ActionButton 
+                text={"Register"} 
+                onPress={() => login()}
+            />
+        </View>
       </View>
     );
 }
