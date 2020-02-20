@@ -19,7 +19,7 @@ const VentViews = {
 }
 
 const stackNavigationConfig = {
-    defaultNavigationOptions: () => ({
+    defaultNavigationOptions: ({navigation}) => ({
         headerStyle: {
             backgroundColor: "#3498db",
             borderBottomWidth: 1,
@@ -30,16 +30,41 @@ const stackNavigationConfig = {
             fontSize: 20,
             fontWeight: 'bold',
         },
-        /*headerRight: () => (<Text>Drawer </Text>)*/
+        headerTitle: () => {
+            var { routeName } = navigation.state;
+            var title;
+            switch(routeName) {
+                case "Login":
+                    title = "Login";
+                    break;
+                case "Profile":
+                    title = "My Profile";
+                    break;
+                case "Vents":
+                    title = "Vents";
+                    break;
+                case "AddVent":
+                    title = "Create Vent";
+                    break;
+                case "About":
+                    title = "About";
+                    break;
+                default:
+                    title = ""
+            }
+            return <Text style={{fontSize: 20, fontWeight: "bold", color: "whitesmoke"}}>{title}</Text>
+        }
     }) 
 }
 
+const ProfileStack = createStackNavigator({Profile}, stackNavigationConfig); 
 const VentsStack = createStackNavigator(VentViews, stackNavigationConfig); 
 const AboutStack = createStackNavigator({About}, stackNavigationConfig); 
 const AuthStack = createStackNavigator({Login}, stackNavigationConfig);
 
 const AppStack = createBottomTabNavigator(
     {
+        Profile: { screen: ProfileStack },
         Vents: { screen: VentsStack },
         About: { screen: AboutStack }
     },
@@ -48,10 +73,12 @@ const AppStack = createBottomTabNavigator(
             tabBarIcon: ({ tintColor }) => {
                 var { routeName } = navigation.state;
                 var iconName;
-                if(routeName == "Vents") {
-                    iconName="ios-chatboxes";
+                if(routeName == "Profile") {
+                    iconName = "ios-person";
+                } else if(routeName == "Vents") {
+                    iconName = "ios-chatboxes";
                 } else if (routeName == "About") {
-                    iconName="ios-book";
+                    iconName = "ios-book";
                 }
                 return <Ionicons name={iconName} size={30} color={tintColor} />;
             }

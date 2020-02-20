@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import ActionButton from './ActionButton.js';
 
-const userInfo = {username: "", password: ""}
+const userInfo = {username: "a", password: "a"}
 
 const styles = StyleSheet.create({ 
     formContainer: {
@@ -59,7 +59,8 @@ export default function Login ({navigation}) {
 
     const login = async() => {
         if(userInfo.username == username && userInfo.password == password) {
-            await AsyncStorage.setItem("isLoggedIn", "1")
+            await AsyncStorage.setItem("isLoggedIn", "1");
+            await AsyncStorage.setItem("username", username);
             navigation.navigate("Vents");
         } else {
             alert("Invalid Credentials");
