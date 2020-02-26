@@ -1,19 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, ScrollView } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import { vents } from './vents.json'
-
 import CircularProgressBar from './CircularProgressBar.js';
+import moment from 'moment';
+import { vents } from './vents.json';
 
 export default function Vents({navigation}) {
+
+  const [ventData, setVentData] = useState([]);
+
+  function mapVentData() {
+    console.log( )
+    var mappedVents = vents.map((vent) => {
+        var timeAgo = moment(vent.createdAt, "DD/MM/YYYY HH:mm").fromNow()
+        if(timeAgo.indexOf("day") > -1 || timeAgo.indexOf("year") > -1) {
+          vent.timePosted = 25;
+        } else if (timeAgo.indexOf("minute") > -1 || timeAgo.indexOf("an hour ago") > -1) {
+          vent.timePosted = 1;
+        } else {
+          vent.timePosted = parseInt(timeAgo);
+        }
+        console.log(timeAgo)
+        return vent;
+    });
+    var filteredVents = mappedVents.filter(function(vent) {
+      return vent.timePosted <= 24 && vent.timePosted > 0;
+    });
+    setVentData(filteredVents);
+  }
+
+  useEffect(() => {
+    mapVentData();
+  }, [])
+
   return (
-    <View style={{flex: 1, alignItems: 'center'}}>
+    <View style={{ flex: 1 }}>
       <View style={{display: "flex", flexDirection: "row", width: "100%", borderBottomWidth: 1}}>
         <View style={{width: "60%", padding: 15}}>
           <Text style={{fontSize: 16}}>Here, you can see how other people are feeling.</Text>
         </View>
-        <View>
+        <View style={{ width: "40%", alignItems: "center", justifyContent: "center" }}>
           <TouchableOpacity style={styles.createVent} onPress={() => navigation.navigate("AddVent")}>
             <View style={{display: "flex", flexDirection: "row"}}>
               <Text style={{fontSize: 20, color: "whitesmoke"}}> Create Vent </Text>
@@ -22,15 +48,15 @@ export default function Vents({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView style={{width: "100%"}} indicatorStyle="white">
+      <ScrollView style={{ width: "100%" }} indicatorStyle="white">
         <View style={styles.ventContainer}>
-          {vents.map(vent => {
+          {ventData.map(vent => {
             return (
               <View key={vent.id} style={styles.ventTile}>
                 <View style={styles.timer}> 
                   <CircularProgressBar 
-                    timeLeft={vent.timeLeft} 
-                    percent={(vent.timeLeft/24)*100}
+                    text={vent.timePosted} 
+                    percent={(vent.timePosted/24)*100}
                     radius={28} 
                     ringWidth={7} 
                     textFontSize={16}/>
@@ -50,8 +76,6 @@ const styles = StyleSheet.create({
   createVent: {
     padding: 5,
     backgroundColor: "#3498db",
-    alignSelf: "flex-end",
-    margin: 15,
     shadowOpacity: 0.5,
     shadowOffset: {width: 1, height: 2}
   },

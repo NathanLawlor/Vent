@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 const styles = StyleSheet.create({ 
     actionButton: {
-        width: "30%", 
+        width: "40%", 
         padding: 10, 
         marginTop: 20,
         backgroundColor: "#3498db",

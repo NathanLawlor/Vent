@@ -16,7 +16,7 @@ const renderThirdLayer = (percent, commonStyles) => {
     }
 }
 
-const CircularProgress = ({percent, radius, ringWidth, textFontSize, timeLeft}) => {
+const CircularProgress = ({percent, radius, ringWidth, textFontSize, text}) => {
     const commonStyles = {
         width: radius * 2,
         height: radius * 2,
@@ -36,7 +36,7 @@ const CircularProgress = ({percent, radius, ringWidth, textFontSize, timeLeft}) 
         <View style={[styles.container, commonStyles]}>
             <View style={[styles.firstProgressLayer, firstProgressLayerStyle, commonStyles]}></View>
             {renderThirdLayer(percent, commonStyles)}
-            <Text style={[styles.display, {fontSize: textFontSize}]}>{timeLeft} hr</Text>
+            <Text style={[styles.display, {fontSize: textFontSize}]}>{text} hr</Text>
         </View>
     );
 }
