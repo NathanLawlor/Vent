@@ -38,6 +38,40 @@ export default function Vents({navigation}) {
     mapVentData();
   }, [])
 
+  const ViewContent = () => {
+    if(ventData.length > 0) {
+        return (
+          <ScrollView style={{width: "100%"}} indicatorStyle="white">
+            <View style={styles.ventContainer}>
+              {ventData.map(vent => {
+                return (
+                  <View key={vent.id} style={styles.ventTile}>
+                    <View style={styles.timer}> 
+                      <CircularProgressBar 
+                        text={vent.timePosted} 
+                        percent={(vent.timePosted/24)*100}
+                        radius={28} 
+                        ringWidth={7} 
+                        textFontSize={14}/>
+                    </View>
+                    <Text style={{fontSize: 20, marginBottom: 5}}>{vent.title}</Text>
+                    <Text>{vent.content}</Text>
+                  </View>
+                )
+              })}
+            </View>
+          </ScrollView>
+        )
+    } else {
+      return (
+        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+          <Text style={{fontSize: 20}}>Oh.. There are currently no vents.</Text>
+          <Text style={{fontSize: 18}}>Why don't you create your own vent?</Text>
+        </View>
+      )
+    }
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{display: "flex", flexDirection: "row", width: "100%", borderBottomWidth: 1}}>
@@ -53,26 +87,7 @@ export default function Vents({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView style={{ width: "100%" }} indicatorStyle="white">
-        <View style={styles.ventContainer}>
-          {ventData.map(vent => {
-            return (
-              <View key={vent.id} style={styles.ventTile}>
-                <View style={styles.timer}> 
-                  <CircularProgressBar 
-                    text={vent.timePosted} 
-                    percent={(vent.timePosted/24)*100}
-                    radius={28} 
-                    ringWidth={7} 
-                    textFontSize={14}/>
-                </View>
-                <Text style={{fontSize: 20, marginBottom: 5}}>{vent.title}</Text>
-                <Text>{vent.content}</Text>
-              </View>
-            )
-          })}
-        </View>
-      </ScrollView>
+      <ViewContent />
     </View>
   )
 }
