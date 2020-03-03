@@ -10,7 +10,6 @@ export default function Vents({navigation}) {
   const [ventData, setVentData] = useState([]);
 
   function mapVentData() {
-    console.log( )
     var mappedVents = vents.map((vent) => {
         var timeAgo = moment(vent.createdAt, "DD/MM/YYYY HH:mm").fromNow()
         if(timeAgo.indexOf("day") > -1 || timeAgo.indexOf("year") > -1) {
@@ -20,7 +19,6 @@ export default function Vents({navigation}) {
         } else {
           vent.timePosted = parseInt(timeAgo);
         }
-        console.log(timeAgo)
         return vent;
     });
     var filteredVents = mappedVents.filter(function(vent) {
@@ -59,7 +57,7 @@ export default function Vents({navigation}) {
                     percent={(vent.timePosted/24)*100}
                     radius={28} 
                     ringWidth={7} 
-                    textFontSize={16}/>
+                    textFontSize={14}/>
                 </View>
                 <Text style={{fontSize: 20, marginBottom: 5}}>{vent.title}</Text>
                 <Text>{vent.content}</Text>

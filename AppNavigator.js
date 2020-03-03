@@ -53,6 +53,12 @@ const stackNavigationConfig = {
                     title = ""
             }
             return <Text style={{fontSize: 20, fontWeight: "bold", color: "whitesmoke"}}>{title}</Text>
+        },
+        headerBackTitle: () => {
+            return null
+        },
+        headerLeftContainerStyle: {
+            paddingLeft: 5
         }
     }) 
 }

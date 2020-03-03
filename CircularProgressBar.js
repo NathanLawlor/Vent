@@ -36,7 +36,7 @@ const CircularProgress = ({percent, radius, ringWidth, textFontSize, text}) => {
         <View style={[styles.container, commonStyles]}>
             <View style={[styles.firstProgressLayer, firstProgressLayerStyle, commonStyles]}></View>
             {renderThirdLayer(percent, commonStyles)}
-            <Text style={[styles.display, {fontSize: textFontSize}]}>{text} hr</Text>
+            <Text style={[styles.display, {fontSize: textFontSize}]}>{text} hr ago</Text>
         </View>
     );
 }
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   },
   display: {
     position: "absolute",
+    textAlign: "center"
   }
 });
 
