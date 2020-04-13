@@ -10,28 +10,16 @@ export default function Vents({navigation}) {
   const [ventData, setVentData] = useState([]);
 
   function mapVentData() {
-    const now = moment().format("DD/MM/YYYY HH:mm");
+    var now = moment()
     var mappedVents = vents.map((vent) => {
-        var difference = moment(now).diff(moment(vent.createdAt, "DD/MM/YYYY HH:mm"));
-        timeAgo = Math.floor(moment.duration(difference).asHours());
-        vent.timePosted = timeAgo;
+        var createdAt = moment(vent.createdAt, "DD/MM/YYYY HH:mm");
+        var difference = now.diff(createdAt, "hours");
+        vent.timePosted = difference;
         return vent;
     });
-    var filteredVents = mappedVents.filter(function(vent) {
-      return vent.timePosted < 24 && vent.timePosted > 0;
-    });
-    var sortedVents = filteredVents.sort(sortByTimeAgo)
+    var filteredVents = mappedVents.filter((vent) => vent.timePosted < 24 && vent.timePosted > 0);
+    var sortedVents = filteredVents.sort((a, b) => a.timePosted > b.timePosted);
     setVentData(sortedVents);
-  }
-
-  function sortByTimeAgo(a, b) {
-    if (a.timePosted < b.timePosted) {
-      return -1;
-    }
-    if (a.timePosted > b.timePosted) {
-      return 1;
-    }
-    return 0;
   }
 
   useEffect(() => {
