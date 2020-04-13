@@ -3,44 +3,61 @@ import { StyleSheet, View, TouchableOpacity, Text, ScrollView } from 'react-nati
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CircularProgressBar from './CircularProgressBar.js';
 import moment from 'moment';
-import { vents } from './vents.json';
+import { db } from './FirebaseConfig';
+
+let ventsRef = db.ref('/vents');
 
 export default function Vents({navigation}) {
 
-  const [ventData, setVentData] = useState([]);
+  const [ventsData, setVentsData] = useState([]);
 
-  function mapVentData() {
+  useEffect(() => {
+    fetchVentsData();
+  }, [])
+
+  function fetchVentsData() {
+    ventsRef.on('value', snapshot => {
+      var data = snapshot.val();
+      var vents = Object.values(data);
+      mapVentData(vents)
+    });
+  }
+
+  function mapVentData(vents) {
     var now = moment()
     var mappedVents = vents.map((vent) => {
         var createdAt = moment(vent.createdAt, "DD/MM/YYYY HH:mm");
-        var difference = now.diff(createdAt, "hours");
-        vent.timePosted = difference;
+        var timeDiffHours = now.diff(createdAt, "hours");
+        vent.timeDiff = timeDiffHours;
+
+        if (timeDiffHours == 0) {
+          var timeDiffMins = now.diff(createdAt, "minutes")
+          vent.timerText = timeDiffMins + (timeDiffMins == 1 ? " min ago" : " mins ago");
+        } else {
+          vent.timerText = timeDiffHours + (timeDiffHours == 1 ? " hour ago" : " hours ago")
+        }
         return vent;
     });
-    var filteredVents = mappedVents.filter((vent) => vent.timePosted < 24 && vent.timePosted > 0);
-    var sortedVents = filteredVents.sort((a, b) => a.timePosted > b.timePosted);
-    setVentData(sortedVents);
+    var filteredVents = mappedVents.filter((vent) => vent.timeDiff < 24 && vent.timeDiff >= 0);
+    var sortedVents = filteredVents.sort((a, b) => a.timeDiff > b.timeDiff);
+    setVentsData(sortedVents);
   }
 
-  useEffect(() => {
-    mapVentData();
-  }, [])
-
   const ViewContent = () => {
-    if(ventData.length > 0) {
+    if(ventsData.length > 0) {
         return (
           <ScrollView style={{width: "100%"}} indicatorStyle="white">
             <View style={styles.ventContainer}>
-              {ventData.map(vent => {
+              {ventsData.map(vent => {
                 return (
-                  <View key={vent.id} style={styles.ventTile}>
+                  <View key={vent.title+vent.createdAt} style={styles.ventTile}>
                     <View style={styles.timer}> 
                       <CircularProgressBar 
-                        text={vent.timePosted} 
-                        percent={(vent.timePosted/24)*100}
-                        radius={28} 
+                        text={vent.timerText} 
+                        percent={(vent.timeDiff/24)*100}
+                        radius={32} 
                         ringWidth={7} 
-                        textFontSize={14}/>
+                        textFontSize={12}/>
                     </View>
                     <Text style={{fontSize: 20, marginBottom: 5}}>{vent.title}</Text>
                     <Text>{vent.content}</Text>

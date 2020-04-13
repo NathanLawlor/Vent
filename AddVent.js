@@ -1,10 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView} from 'react-native';
-
-const submitVent = () => {
-  alert("Vent Submitted :)")
-}
+import { db } from './FirebaseConfig';
+import moment from 'moment'
 
 const FormInput = ({ heading, placeholder, value, maxLength, onChangeText }) => {
   return (
@@ -27,11 +25,22 @@ const FormInput = ({ heading, placeholder, value, maxLength, onChangeText }) => 
   )
 }
 
-export default function AddVent() {
+export default function AddVent({navigation}) {
 
   const [title, setTitle] = useState("");
   const [feeling, setFeeling] = useState(""); 
-  const [content, setContent] = useState("");   
+  const [content, setContent] = useState("");  
+  
+  const submitVent = () => {
+    const createdAt = moment().format("DD/MM/YYYY HH:mm")
+    db.ref('/vents').push({
+      title: title,
+      content: content,
+      createdAt: createdAt
+    });
+    alert("Vent Submitted :)")
+    navigation.navigate("Vents")
+  }
 
   return (
     <View style={{ paddingLeft: 10, paddingRight: 10}}>
