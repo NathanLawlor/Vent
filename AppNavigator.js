@@ -9,6 +9,7 @@ import AddVent from './AddVent.js';
 import About from './About.js';
 import Profile from './Profile.js'
 import Login from './Login.js';
+import Register from './Register.js';
 import AuthLoadingScreen from './AuthLoadingScreen.js';
 
 import { Text } from 'react-native';
@@ -22,7 +23,7 @@ const stackNavigationConfig = {
     defaultNavigationOptions: ({navigation}) => ({
         headerStyle: {
             backgroundColor: "#3498db",
-            borderBottomWidth: 1,
+            borderBottomWidth: (navigation.state.routeName == "Login" || navigation.state.routeName == "Register" ? 0 : 1),
             borderBottomColor: "black",
         },
         headerTintColor: "whitesmoke",
@@ -35,7 +36,10 @@ const stackNavigationConfig = {
             var title;
             switch(routeName) {
                 case "Login":
-                    title = "Login";
+                    title = "";
+                    break;
+                case "Register":
+                    title = ""
                     break;
                 case "Profile":
                     title = "My Profile";
@@ -67,6 +71,7 @@ const ProfileStack = createStackNavigator({Profile}, stackNavigationConfig);
 const VentsStack = createStackNavigator(VentViews, stackNavigationConfig); 
 const AboutStack = createStackNavigator({About}, stackNavigationConfig); 
 const AuthStack = createStackNavigator({Login}, stackNavigationConfig);
+const RegisterStack = createStackNavigator({Register}, stackNavigationConfig);
 
 const AppStack = createBottomTabNavigator(
     {
@@ -111,7 +116,8 @@ export default createAppContainer(createSwitchNavigator(
     {
         AuthLoading: AuthLoadingScreen,
         App: AppStack,
-        Auth: AuthStack
+        Auth: AuthStack,
+        Register: RegisterStack
     }, 
     {
         initialRouteName: "AuthLoading"

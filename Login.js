@@ -1,83 +1,38 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { StyleSheet, View, Text, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import ActionButton from './ActionButton.js';
+import LoginInput from './LoginInput.js';
 
 const userInfo = {username: "admin", password: ""}
-
-const styles = StyleSheet.create({ 
-    formContainer: {
-        height: "33%", 
-        width: "90%",
-        marginTop: 25,
-        alignItems: "center", 
-        justifyContent: "center",
-        backgroundColor: "lightblue",
-        padding: 20,
-        borderWidth: 1,
-        borderRadius: 10,
-    },
-    loginInput: {
-        height: 40,
-        padding: 5,
-        fontSize: 20,
-        borderBottomWidth: 3,
-        borderColor: "#3498db",
-    },
-    buttonContainer: { 
-        width: "100%", 
-        flexDirection: "row", 
-        justifyContent: "space-between" 
-    }
-})
-
-const LoginInput = ({icon, value, placeholder, onChangeText, isSecure}) => {
-    return (
-        <View style={{width: "100%", display: "flex", flexDirection: "row", marginBottom: 25 }}>
-            <View style={{ flex: 1, justifyContent: "flex-end"}}>
-                <Ionicons 
-                    name={icon} 
-                    size={35} 
-                    color={"#3498db"}
-                />
-            </View>
-            <View style={{ flex: 7, justifyContent: "center" }}>
-                <TextInput 
-                    value={value}
-                    placeholder={placeholder}
-                    autoCapitalize="none"
-                    style={styles.loginInput}
-                    selectionColor={"#3498db"}
-                    onChangeText={text => onChangeText(text)}
-                    autoCorrect={false}
-                    secureTextEntry={isSecure}
-                />
-            </View>
-        </View>
-    )
-}
 
 export default function Login ({navigation}) {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [invalidCredentials, setInvalidCredentials] = useState(false)
 
     const login = async() => {
         if(userInfo.username == username && userInfo.password == password) {
-            await AsyncStorage.setItem("isLoggedIn", "1");
-            await AsyncStorage.setItem("username", username);
-            navigation.navigate("Vents");
+            setInvalidCredentials(false)
+            await AsyncStorage.setItem("isLoggedIn", "1")
+            await AsyncStorage.setItem("username", username)
+            navigation.navigate("Vents")
         } else {
-            alert("Invalid Credentials");
+            setInvalidCredentials(true)
+            alert("Invalid Credentials")
         }
     }
 
+    const register = () => {
+        navigation.navigate("Register")
+    }
+
     return (
-        <View style={{flex: 1, alignItems: 'center' }}>
-            <View style={{height: "33%", width: "100%", alignItems: 'center', justifyContent: "center" }}>
-                <Text style={{ textAlign: "center", fontSize: 150 }}>V</Text>
+        <View style={{flex: 1, alignItems: 'center', backgroundColor: "#3498db"}}>
+            <View style={{height: "20%", width: "100%", alignItems: 'center', justifyContent: "center"}}>
+                <Text style={{ textAlign: "center", fontSize: 100}}>V</Text>
             </View>
             <View style={styles.formContainer}>
                 <View>
@@ -87,6 +42,7 @@ export default function Login ({navigation}) {
                         placeholder={"Username"}
                         onChangeText={setUsername}
                         isSecure={false}
+                        invalid={invalidCredentials}
                     />
                     <LoginInput 
                         icon={"ios-key"}
@@ -94,21 +50,42 @@ export default function Login ({navigation}) {
                         placeholder={"Password"}
                         onChangeText={setPassword}
                         isSecure={true}
+                        invalid={invalidCredentials}
                     />
                 </View>
                 <View style={styles.buttonContainer}>
                     <ActionButton 
                         text={"Login"} 
                         onPress={() => login()}
-                    />
-                    <ActionButton 
-                        text={"Register"} 
-                        onPress={() => login()}
+                        width={"100%"}
                     />
                 </View>
-
             </View>
-            {/*<Text style={{ textAlign: "center", fontSize: 60, position: "absolute", bottom: "5%" }}>Vent</Text>*/}
+
+            <View style={{width: "100%", flex: 1, padding: 10}}> 
+                <Button
+                    onPress={() => register()}
+                    title="Register an account here"
+                    color="white"
+                />
+            </View>
         </View>
     );
 }
+
+const styles = StyleSheet.create({ 
+    formContainer: {
+        width: "90%",
+        marginTop: 25,
+        alignItems: "center", 
+        justifyContent: "center",
+        backgroundColor: "lightblue",
+        padding: 20,
+        borderWidth: 1,
+    },
+    buttonContainer: { 
+        width: "100%", 
+        flexDirection: "row", 
+        justifyContent: "center",
+    }
+})

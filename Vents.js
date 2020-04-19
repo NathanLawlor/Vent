@@ -28,17 +28,18 @@ export default function Vents({navigation}) {
     var mappedVents = vents.map((vent) => {
         var createdAt = moment(vent.createdAt, "DD/MM/YYYY HH:mm");
         var timeDiffHours = now.diff(createdAt, "hours");
-        vent.timeDiff = timeDiffHours;
 
         if (timeDiffHours == 0) {
           var timeDiffMins = now.diff(createdAt, "minutes")
-          vent.timerText = timeDiffMins + (timeDiffMins == 1 ? " min ago" : " mins ago");
+          vent.timerText = (timeDiffMins == 0 ? "Just now" : timeDiffMins + (timeDiffMins == 0 ? " min ago" : " mins ago"));
+          vent.timeDiff = timeDiffMins;
         } else {
           vent.timerText = timeDiffHours + (timeDiffHours == 1 ? " hour ago" : " hours ago")
+          vent.timeDiff = timeDiffHours * 60;
         }
         return vent;
     });
-    var filteredVents = mappedVents.filter((vent) => vent.timeDiff < 24 && vent.timeDiff >= 0);
+    var filteredVents = mappedVents.filter((vent) => vent.timeDiff < 3600 && vent.timeDiff >= 0);
     var sortedVents = filteredVents.sort((a, b) => a.timeDiff > b.timeDiff);
     setVentsData(sortedVents);
   }
@@ -54,7 +55,7 @@ export default function Vents({navigation}) {
                     <View style={styles.timer}> 
                       <CircularProgressBar 
                         text={vent.timerText} 
-                        percent={(vent.timeDiff/24)*100}
+                        percent={(vent.timeDiff/3600)*100}
                         radius={32} 
                         ringWidth={7} 
                         textFontSize={12}/>
@@ -71,7 +72,7 @@ export default function Vents({navigation}) {
       return (
         <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
           <Text style={{fontSize: 20}}>Oh.. There are currently no vents.</Text>
-          <Text style={{fontSize: 18}}>Why don't you create your own vent?</Text>
+          <Text style={{fontSize: 18}}>Why don't you create your own?</Text>
         </View>
       )
     }
@@ -80,14 +81,13 @@ export default function Vents({navigation}) {
   return (
     <View style={{ flex: 1 }}>
       <View style={{display: "flex", flexDirection: "row", width: "100%", borderBottomWidth: 1}}>
-        <View style={{width: "60%", padding: 15}}>
-          <Text style={{fontSize: 16}}>Here, you can see how other people are feeling.</Text>
+        <View style={{width: "70%", padding: 10, alignItems: "center", justifyContent: "center"}}>
+          <Text style={{fontSize: 16, textAlign: "left"}}>Here, you can see other people's vents. Why not try venting yourself?</Text>
         </View>
-        <View style={{ width: "40%", alignItems: "center", justifyContent: "center" }}>
+        <View style={{ width: "35%", alignItems: "center", justifyContent: "center" }}>
           <TouchableOpacity style={styles.createVent} onPress={() => navigation.navigate("AddVent")}>
             <View style={{display: "flex", flexDirection: "row"}}>
-              <Text style={{fontSize: 20, color: "whitesmoke"}}> Create Vent </Text>
-              <Ionicons name={"ios-add"} size={25} color={"whitesmoke"}/>
+              <Text style={{fontSize: 20, fontWeight: "bold", color: "whitesmoke"}}> Vent +</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   ventTile: {
     position: "relative",
-    margin: 15,
+    margin: 18,
     width: "85%",
     padding: 15,
     backgroundColor: "whitesmoke", 
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   timer: {
     position: "absolute", 
     right: -10, 
-    top: -18,
+    top: -26,
     borderRadius: 50,
     backgroundColor: "whitesmoke", 
     shadowOpacity: 0.7,

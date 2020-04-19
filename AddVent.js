@@ -2,7 +2,9 @@ import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView} from 'react-native';
 import { db } from './FirebaseConfig';
-import moment from 'moment'
+import moment from 'moment';
+
+import ActionButton from './ActionButton.js';
 
 const FormInput = ({ heading, placeholder, value, maxLength, onChangeText }) => {
   return (
@@ -70,11 +72,12 @@ export default function AddVent({navigation}) {
             maxLength={25}
           />
 
-          <TouchableOpacity style={styles.submitVent} onPress={() => submitVent()}>
-            <View>
-              <Text style={{fontSize: 25, color: "whitesmoke"}}> Vent </Text>
-            </View>
-          </TouchableOpacity>     
+          <ActionButton 
+            text={"Vent"}
+            onPress={() => submitVent()}
+            width={"100%"}
+          />
+
         </View>
       </ScrollView>
     </View>
